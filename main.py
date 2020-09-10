@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from functools import reduce
 
-#data = pd.read_csv('Dataset.csv', sep=',', header=None)
-data = pd.read_csv('data.csv', sep=',', header=None)
+data = pd.read_csv('Dataset.csv', sep=',', header=None)
+#data = pd.read_csv('data.csv', sep=',', header=None)
 
 def calcularEuclidean(lista):
     calculo = []
@@ -54,14 +54,25 @@ def encontrarMenor(matriz):
                 menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
                 x = j 
                 y = i 
-    print(menor, x, y)
     if x < y:
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
 
 def enlacePromedio(matriz, copia_matriz, x, y):
+    
+    #encontrar cuantas variables hay en cada cluster a unir
+    Nx = nVariablesCluster(x)
+    Ny = nVariablesCluster(y)
+    
     pass
 
+def nVariablesCluster(cluster):
+    variables = 0
+    for i in data[0]:
+        if i in cluster:
+            variables = variables +1
+    return variables
+    
 def enlaceCompleto(matriz, matriz_copia, x, y):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
@@ -201,7 +212,6 @@ def obtenerUltimoCluster(matriz):
 def agruparCluster(matriz, enlace):
     matriz_copia = matriz
     x, y = encontrarMenor(matriz)
-    
     matriz = matriz.drop([y], axis=1)
     matriz = matriz.drop([y], axis=0)
     matriz = matriz.rename(columns={x: "({},{})".format(x,y)})
@@ -212,15 +222,16 @@ def agruparCluster(matriz, enlace):
 
     
 if __name__ == '__main__':
-    matriz_distancia =  data #calculaDistancia(data, calcularEuclidean)
-    print(matriz_distancia)
-    matriz_distancia = transformarMatriz(matriz_distancia)
-    print(matriz_distancia)
+    #matriz_distancia =  data #calculaDistancia(data, calcularEuclidean)
+    #print(matriz_distancia)
+    #matriz_distancia = transformarMatriz(matriz_distancia)
+    #print(matriz_distancia)
     
-    while len(matriz_distancia) != 2:
-        matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceCompleto)
-    print(matriz_distancia)
-    print("Ultimo cluster", cluster)
+ 
+    #while len(matriz_distancia) != 2:
+        #matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceCompleto)
+    #print(matriz_distancia)
+    #print("Ultimo cluster", cluster)
     
     
     
