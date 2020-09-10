@@ -46,7 +46,7 @@ def calcularPearson(lista):
     return  1-p 
 
 def encontrarMenor(matriz):
-    menor = matriz['B']['A']
+    menor = float(matriz.max())
     for i in range(0, len(matriz)):
         for j in  range(0, len(matriz.columns)):
             if (i != j ) and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] != '--') and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor):
@@ -54,8 +54,8 @@ def encontrarMenor(matriz):
                 x = j 
                 y = i 
                 
-    #print(matriz)
-   
+    print(matriz)
+    print(menor)
     if x < y:
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
@@ -91,7 +91,7 @@ def calculaDistancia(datos, metodo):
   
 def agruparCluster(matriz):
     matriz_copia = matriz
-    print(matriz_copia)
+    #print(matriz_copia)
     x, y = encontrarMenor(matriz)
     
     matriz = matriz.drop([y], axis=1)
@@ -106,23 +106,46 @@ def agruparCluster(matriz):
             matriz["{},{}".format(x,y)][i] = matriz_copia[x][j] 
         else: 
             matriz["{},{}".format(x,y)][i] = matriz_copia[y][j] 
-    print('-----------')
-    print(matriz)
-    print('lista las columnas')
+    #print('-----------')
+    #print(matriz)
+    #print('lista las columnas')
     for i in range(matriz.index.values.tolist().index("{},{}".format(x,y))+1, len(matriz)):
         j = matriz.index.values.tolist()[i]
-        print(j, x, y)
-        print(matriz_copia[j][x], matriz_copia[y][j])
-        if matriz_copia[j][x] < matriz_copia[y][j]:
-            matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+        #print(j, x, y)
+        #print(matriz_copia[j][x], matriz_copia[y][j])
+        if matriz_copia[j][x] != '--':
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[j][x] < matriz_copia[y][j]:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+                else:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+            else:
+                if matriz_copia[j][x] < matriz_copia[j][y]:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+                else:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][y]
         else:
-            matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[x][j] < matriz_copia[y][j]:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[x][j]
+                else:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+            else: 
+                if matriz_copia[x][j] < matriz_copia[j][y]:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[x][j]
+                else:
+                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][y]
+                
+                
+                
     #print(matriz)
     print('termina una iteración')
     return matriz
     
 if __name__ == '__main__':
     matriz_distancia = calculaDistancia(data, calcularEuclidean)
+    print(matriz_distancia)
+    #encontrarMenor(matriz_distancia)
     while len(matriz_distancia) != 2:
         matriz_distancia = agruparCluster(matriz_distancia)
     
