@@ -44,10 +44,10 @@ def calcularPearson(lista):
     return  1-p 
 
 def encontrarMenor(matriz):
-    menor = matriz['A']['B']
+    menor = matriz['B']['A']
     for i in range(0, len(matriz)):
-        for j in range(0, len(matriz.columns)):
-            if (i!=j) and (matriz[cambiarClave(j)][cambiarClave(i)] < menor):
+        for j in  range(0, len(matriz.columns)):
+            if (i != j ) and (matriz[cambiarClave(j)][cambiarClave(i)] != '--') and (matriz[cambiarClave(j)][cambiarClave(i)] < menor):
                 menor = matriz[cambiarClave(j)][cambiarClave(i)]
                 x = j 
                 y = i 
@@ -71,8 +71,13 @@ def cambiarClave(num):
     if num == 7:
         return 'H'
     
-    
-def CalculaDistancia(datos, matriz, metodo):
+def cambiarMatriz(matriz):
+    for i in range(0, len(matriz.columns)):
+        for j in range(0, i):
+            matriz[cambiarClave(j)][cambiarClave(i)] = "--"
+    return matriz
+            
+def calculaDistancia(datos, matriz, metodo):
     fil = []
     for  row1 in range(0, len(data)):
         for row2 in range(0, len(data)):
@@ -86,9 +91,11 @@ def CalculaDistancia(datos, matriz, metodo):
 if __name__ == '__main__':
     data = pd.read_csv('Dataset.csv', sep=',', header=None)
     matriz_distancia = pd.DataFrame(0.0 ,index=data[0],columns= data[0])
-    CalculaDistancia(data, matriz_distancia, calcularEuclidean)
+    calculaDistancia(data, matriz_distancia, calcularEuclidean)
+    cambiarMatriz(matriz_distancia)
     menor, x, y = encontrarMenor(matriz_distancia)
-    print(menor, x, y)
+    
+    
     
     
 
