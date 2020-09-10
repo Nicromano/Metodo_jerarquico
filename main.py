@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from functools import reduce
 
-#data = pd.read_csv('Dataset.csv', sep=',', header=None)
-data = pd.read_csv('data.csv', sep=',', header=None)
+data = pd.read_csv('Dataset.csv', sep=',', header=None)
+#data = pd.read_csv('data.csv', sep=',', header=None)
 
 def calcularEuclidean(lista):
     calculo = []
@@ -48,27 +48,13 @@ def calcularPearson(lista):
 
 def encontrarMenor(matriz):
     menor = max(matriz.max())
-    print(menor)
     for i in range(0, len(matriz)-1):
         for j in range(i+1, len(matriz.columns)):
-            ##print(i, j)
-            #print(type(float(matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)])))
             if matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor:
                 menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
-                print("menor", menor)
                 x = j 
                 y = i 
-                
-    #for i in range(0, len(matriz)):
-        #for j in  range(0, len(matriz.columns)):
-            #if (i != j ) and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] != '--') and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor):
-                #print(matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)])
-                #menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
-                #x = j 
-                #y = i        
-    #print(matriz)
-    #print(menor)
-
+            
     if x < y:
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
@@ -83,7 +69,6 @@ def enlaceCompleto(matriz, copia_matriz, x, y):
 def enlaceSimple(matriz, matriz_copia, x, y):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
-        #print(matriz_copia[x][j], matriz_copia[y][j])
         if matriz_copia[x][j] != '--':
             if matriz_copia[y][j] != '--':
                 if matriz_copia[x][j] < matriz_copia[y][j]:
@@ -165,7 +150,6 @@ def obtenerUltimoCluster(matriz):
     
 def agruparCluster(matriz, enlace):
     matriz_copia = matriz
-    #print(matriz_copia)
     x, y = encontrarMenor(matriz)
     
     matriz = matriz.drop([y], axis=1)
@@ -178,9 +162,9 @@ def agruparCluster(matriz, enlace):
 
     
 if __name__ == '__main__':
-    matriz_distancia = data #calculaDistancia(data, calcularEuclidean)
-    print(matriz_distancia)
-    matriz_distancia = transformarMatriz(matriz_distancia)
+    matriz_distancia =  calculaDistancia(data, calcularEuclidean)
+    #print(matriz_distancia)
+    #matriz_distancia = transformarMatriz(matriz_distancia)
     
     while len(matriz_distancia) != 2:
         matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceSimple)
