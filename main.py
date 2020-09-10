@@ -54,8 +54,9 @@ def encontrarMenor(matriz):
                 x = j 
                 y = i 
                 
-    print(matriz)
-    print(menor)
+    #print(matriz)
+    #print(menor)
+    print(x, y)
     if x < y:
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
@@ -89,6 +90,10 @@ def calculaDistancia(datos, metodo):
             matriz[cambiarClave(j)][cambiarClave(i)] = "--"
     return matriz
   
+  
+def obtenerUltimoCluster(matriz):
+    return "({},{})".format(list(matriz.columns)[1],matriz.index.values.tolist()[0]) 
+    
 def agruparCluster(matriz):
     matriz_copia = matriz
     #print(matriz_copia)
@@ -96,58 +101,61 @@ def agruparCluster(matriz):
     
     matriz = matriz.drop([y], axis=1)
     matriz = matriz.drop([y], axis=0)
-    matriz = matriz.rename(columns={x: "{},{}".format(x,y)})
-    matriz = matriz.rename(index={x: "{},{}".format(x,y)})
+    matriz = matriz.rename(columns={x: "({},{})".format(x,y)})
+    matriz = matriz.rename(index={x: "({},{})".format(x,y)})
     
-    for i in range(0, matriz.index.values.tolist().index("{},{}".format(x,y))):
+    for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         #print(matriz_copia[x][j], matriz_copia[y][j])
         if matriz_copia[x][j] < matriz_copia[y][j]:
-            matriz["{},{}".format(x,y)][i] = matriz_copia[x][j] 
+            matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
         else: 
-            matriz["{},{}".format(x,y)][i] = matriz_copia[y][j] 
+            matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
     #print('-----------')
     #print(matriz)
     #print('lista las columnas')
-    for i in range(matriz.index.values.tolist().index("{},{}".format(x,y))+1, len(matriz)):
+    for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
         j = matriz.index.values.tolist()[i]
         #print(j, x, y)
         #print(matriz_copia[j][x], matriz_copia[y][j])
         if matriz_copia[j][x] != '--':
             if matriz_copia[y][j] != '--':
                 if matriz_copia[j][x] < matriz_copia[y][j]:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][x]
                 else:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[y][j]
             else:
                 if matriz_copia[j][x] < matriz_copia[j][y]:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][x]
                 else:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][y]
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][y]
         else:
             if matriz_copia[y][j] != '--':
                 if matriz_copia[x][j] < matriz_copia[y][j]:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[x][j]
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[x][j]
                 else:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[y][j]
             else: 
                 if matriz_copia[x][j] < matriz_copia[j][y]:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[x][j]
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[x][j]
                 else:
-                    matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][y]
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[j][y]
                 
                 
-                
+    #x, y = encontrarMenor(matriz)    
     #print(matriz)
-    print('termina una iteración')
-    return matriz
+    #print('termina una iteración')
+    return matriz, obtenerUltimoCluster(matriz)
+
     
 if __name__ == '__main__':
     matriz_distancia = calculaDistancia(data, calcularEuclidean)
     print(matriz_distancia)
     #encontrarMenor(matriz_distancia)
     while len(matriz_distancia) != 2:
-        matriz_distancia = agruparCluster(matriz_distancia)
+        matriz_distancia, cluster = agruparCluster(matriz_distancia)
+    print(matriz_distancia)
+    print("Ultimo cluster", cluster)
     
     
     
