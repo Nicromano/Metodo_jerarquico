@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from functools import reduce
 
-data = pd.read_csv('Dataset.csv', sep=',', header=None)
-#data = pd.read_csv('data.csv', sep=',', header=None)
+#data = pd.read_csv('Dataset.csv', sep=',', header=None)
+data = pd.read_csv('data.csv', sep=',', header=None)
 
 def calcularEuclidean(lista):
     calculo = []
@@ -54,7 +54,7 @@ def encontrarMenor(matriz):
                 menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
                 x = j 
                 y = i 
-            
+    print(menor, x, y)
     if x < y:
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
@@ -62,8 +62,58 @@ def encontrarMenor(matriz):
 def enlacePromedio(matriz, copia_matriz, x, y):
     pass
 
-def enlaceCompleto(matriz, copia_matriz, x, y):
-    pass
+def enlaceCompleto(matriz, matriz_copia, x, y):
+    for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
+        j = matriz.index.values.tolist()[i]
+        if matriz_copia[x][j] != '--':
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[x][j] > matriz_copia[y][j]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
+            else:
+                if matriz_copia[x][j] > matriz_copia[j][y]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][y]
+        else:
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[j][x] > matriz_copia[y][j]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][x] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
+            else:
+                if matriz_copia[j][x] > matriz_copia[j][y]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][x] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][y] 
+                
+                
+    for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
+        j = matriz.index.values.tolist()[i]
+        if matriz_copia[j][x] != '--':
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[j][x] > matriz_copia[y][j]:
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][x]
+                else:
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[y][j]
+            else:
+                if matriz_copia[j][x] > matriz_copia[j][y]:
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][x]
+                else:
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[j][y]
+        else:
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[x][j] > matriz_copia[y][j]:
+                    matriz[j]["({},{})".format(x,y)] = matriz_copia[x][j]
+                else:
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[y][j]
+            else: 
+                if matriz_copia[x][j] > matriz_copia[j][y]:
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[x][j]
+                else:
+                    matriz[j][ "({},{})".format(x,y)] = matriz_copia[j][y]
+    return matriz
 
 
 def enlaceSimple(matriz, matriz_copia, x, y):
@@ -162,12 +212,13 @@ def agruparCluster(matriz, enlace):
 
     
 if __name__ == '__main__':
-    matriz_distancia =  calculaDistancia(data, calcularEuclidean)
-    #print(matriz_distancia)
-    #matriz_distancia = transformarMatriz(matriz_distancia)
+    matriz_distancia =  data #calculaDistancia(data, calcularEuclidean)
+    print(matriz_distancia)
+    matriz_distancia = transformarMatriz(matriz_distancia)
+    print(matriz_distancia)
     
     while len(matriz_distancia) != 2:
-        matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceSimple)
+        matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceCompleto)
     print(matriz_distancia)
     print("Ultimo cluster", cluster)
     
