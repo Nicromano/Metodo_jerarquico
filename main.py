@@ -49,16 +49,29 @@ def encontrarMenor(matriz):
     menor = matriz['B']['A']
     for i in range(0, len(matriz)):
         for j in  range(0, len(matriz.columns)):
-            if (i != j ) and (matriz[cambiarClave(j)][cambiarClave(i)] != '--') and (matriz[cambiarClave(j)][cambiarClave(i)] < menor):
-                menor = matriz[cambiarClave(j)][cambiarClave(i)]
+            if (i != j ) and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] != '--') and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor):
+                menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
                 x = j 
                 y = i 
+                
+    #print(matriz)
+   
     if x < y:
-        return menor, cambiarClave(x), cambiarClave(y)
-    return menor, cambiarClave(y), cambiarClave(x)
+        return  cambiarKey(matriz, x), cambiarKey( matriz, y)
+    return  cambiarKey( matriz, y), cambiarKey(matriz, x)
+
+def encontrarPromedio(matriz):
+    pass
+
+def encontrarCompleto(matriz):
+    pass
+
 
 def cambiarClave(num):
     return data[0][num]
+
+def cambiarKey(matriz, num):
+    return matriz.index.values.tolist()[num]
  
                 
 def calculaDistancia(datos, metodo):
@@ -79,25 +92,40 @@ def calculaDistancia(datos, metodo):
 def agruparCluster(matriz):
     matriz_copia = matriz
     print(matriz_copia)
-    menor, x, y = encontrarMenor(matriz)
+    x, y = encontrarMenor(matriz)
+    
     matriz = matriz.drop([y], axis=1)
     matriz = matriz.drop([y], axis=0)
     matriz = matriz.rename(columns={x: "{},{}".format(x,y)})
     matriz = matriz.rename(index={x: "{},{}".format(x,y)})
     
-    for i in range(0, matriz_distancia.index.values.tolist().index(x)):
-        j = matriz_distancia.index.values.tolist()[i]
-        print(matriz_copia[x][j], matriz_copia[y][j])
+    for i in range(0, matriz.index.values.tolist().index("{},{}".format(x,y))):
+        j = matriz.index.values.tolist()[i]
+        #print(matriz_copia[x][j], matriz_copia[y][j])
         if matriz_copia[x][j] < matriz_copia[y][j]:
             matriz["{},{}".format(x,y)][i] = matriz_copia[x][j] 
         else: 
             matriz["{},{}".format(x,y)][i] = matriz_copia[y][j] 
-            
+    print('-----------')
     print(matriz)
+    print('lista las columnas')
+    for i in range(matriz.index.values.tolist().index("{},{}".format(x,y))+1, len(matriz)):
+        j = matriz.index.values.tolist()[i]
+        print(j, x, y)
+        print(matriz_copia[j][x], matriz_copia[y][j])
+        if matriz_copia[j][x] < matriz_copia[y][j]:
+            matriz[j][x: "{},{}".format(x,y)] = matriz_copia[j][x]
+        else:
+            matriz[j][x: "{},{}".format(x,y)] = matriz_copia[y][j]
+    #print(matriz)
+    print('termina una iteración')
+    return matriz
     
 if __name__ == '__main__':
     matriz_distancia = calculaDistancia(data, calcularEuclidean)
-    agruparCluster(matriz_distancia)
+    while len(matriz_distancia) != 2:
+        matriz_distancia = agruparCluster(matriz_distancia)
+    
     
     
     
