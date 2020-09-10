@@ -9,6 +9,8 @@ import pandas as pd
 import math
 from functools import reduce
 
+data = pd.read_csv('Dataset.csv', sep=',', header=None)
+
 def calcularEuclidean(lista):
     calculo = []
     for i in range(0,len(lista), 2):
@@ -51,34 +53,17 @@ def encontrarMenor(matriz):
                 menor = matriz[cambiarClave(j)][cambiarClave(i)]
                 x = j 
                 y = i 
-    return menor, cambiarClave(x), cambiarClave(y)
+    if x < y:
+        return menor, cambiarClave(x), cambiarClave(y)
+    return menor, cambiarClave(y), cambiarClave(x)
 
 def cambiarClave(num):
-    if num == 0:
-        return 'A'
-    if num == 1:
-        return 'B'
-    if num == 2:
-        return 'C'
-    if num == 3:
-        return 'D'
-    if num == 4:
-        return 'E'
-    if num == 5:
-        return 'F'
-    if num == 6:
-        return 'G'
-    if num == 7:
-        return 'H'
-    
-def cambiarMatriz(matriz):
-    for i in range(0, len(matriz.columns)):
-        for j in range(0, i):
-            matriz[cambiarClave(j)][cambiarClave(i)] = "--"
-    return matriz
-            
-def calculaDistancia(datos, matriz, metodo):
+    return data[0][num]
+ 
+                
+def calculaDistancia(datos, metodo):
     fil = []
+    matriz = pd.DataFrame(0.0 ,index=data[0],columns= data[0])
     for  row1 in range(0, len(data)):
         for row2 in range(0, len(data)):
             for col in range(1, len(data.columns)):
@@ -86,14 +71,36 @@ def calculaDistancia(datos, matriz, metodo):
                 fil.append(data[col][row2])
             matriz[cambiarClave(row1)][cambiarClave(row2)] = metodo(fil)
             fil.clear()
+    for i in range(0, len(matriz.columns)):
+        for j in range(0, i):
+            matriz[cambiarClave(j)][cambiarClave(i)] = "--"
     return matriz
-      
+  
+def agruparCluster(matriz):
+    matriz_copia = matriz
+    print(matriz_copia)
+    menor, x, y = encontrarMenor(matriz)
+    matriz = matriz.drop([y], axis=1)
+    matriz = matriz.drop([y], axis=0)
+    matriz = matriz.rename(columns={x: "{},{}".format(x,y)})
+    matriz = matriz.rename(index={x: "{},{}".format(x,y)})
+    
+    for i in range(0, matriz_distancia.index.values.tolist().index(x)):
+        j = matriz_distancia.index.values.tolist()[i]
+        print(matriz_copia[x][j], matriz_copia[y][j])
+        if matriz_copia[x][j] < matriz_copia[y][j]:
+            matriz["{},{}".format(x,y)][i] = matriz_copia[x][j] 
+        else: 
+            matriz["{},{}".format(x,y)][i] = matriz_copia[y][j] 
+            
+    print(matriz)
+    
 if __name__ == '__main__':
-    data = pd.read_csv('Dataset.csv', sep=',', header=None)
-    matriz_distancia = pd.DataFrame(0.0 ,index=data[0],columns= data[0])
-    calculaDistancia(data, matriz_distancia, calcularEuclidean)
-    cambiarMatriz(matriz_distancia)
-    menor, x, y = encontrarMenor(matriz_distancia)
+    matriz_distancia = calculaDistancia(data, calcularEuclidean)
+    agruparCluster(matriz_distancia)
+    
+    
+    
     
     
     
