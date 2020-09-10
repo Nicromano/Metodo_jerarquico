@@ -52,8 +52,7 @@ def encontrarMenor(matriz):
             if (i != j ) and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] != '--') and (matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor):
                 menor = matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)]
                 x = j 
-                y = i 
-                
+                y = i        
     #print(matriz)
     #print(menor)
     print(x, y)
@@ -89,8 +88,7 @@ def calculaDistancia(datos, metodo):
         for j in range(0, i):
             matriz[cambiarClave(j)][cambiarClave(i)] = "--"
     return matriz
-  
-  
+
 def obtenerUltimoCluster(matriz):
     return "({},{})".format(list(matriz.columns)[1],matriz.index.values.tolist()[0]) 
     
@@ -107,10 +105,31 @@ def agruparCluster(matriz):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         #print(matriz_copia[x][j], matriz_copia[y][j])
-        if matriz_copia[x][j] < matriz_copia[y][j]:
-            matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
-        else: 
-            matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
+        if matriz_copia[x][j] != '--':
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[x][j] < matriz_copia[y][j]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
+            else:
+                if matriz_copia[x][j] < matriz_copia[j][y]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[x][j] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][y]
+        else:
+            if matriz_copia[y][j] != '--':
+                if matriz_copia[j][x] < matriz_copia[y][j]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][x] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[y][j] 
+            else:
+                if matriz_copia[j][x] < matriz_copia[j][y]:
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][x] 
+                else: 
+                    matriz["({},{})".format(x,y)][i] = matriz_copia[j][y] 
+                
+                
+                
 
     for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
         j = matriz.index.values.tolist()[i]
