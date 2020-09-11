@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from functools import reduce
 
-data = pd.read_csv('Dataset.csv', sep=',', header=None)
-#data = pd.read_csv('data.csv', sep=',', header=None)
+#data = pd.read_csv('Dataset.csv', sep=',', header=None)
+data = pd.read_csv('data.csv', sep=',', header=None)
 
 def calcularEuclidean(lista):
     calculo = []
@@ -58,22 +58,63 @@ def encontrarMenor(matriz):
         return  cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  cambiarKey( matriz, y), cambiarKey(matriz, x)
 
-def enlacePromedio(matriz, copia_matriz, x, y):
+def enlacePromedio(matriz, copia_matriz, x, y, original = None):
     
-    #encontrar cuantas variables hay en cada cluster a unir
-    Nx = nVariablesCluster(x)
-    Ny = nVariablesCluster(y)
-    
-    pass
+    #print(original)
+    for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
+        j = matriz.index.values.tolist()[i]
+        Nx = nVariablesCluster(original, "({},{})".format(x,y))
+        Ny = nVariablesCluster(original, j)
+        matriz["({},{})".format(x,y)][j] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, "({},{})".format(x,y), j)
+    #print("fin columnas")
+    for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
+        j = matriz.index.values.tolist()[i]
+        Nx = nVariablesCluster(original, "({},{})".format(x,y))
+        Ny = nVariablesCluster(original, j)
+        matriz[j]["({},{})".format(x,y)] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, j, "({},{})".format(x,y))
+        
+    return matriz
+                 
 
-def nVariablesCluster(cluster):
-    variables = 0
+def sumatoriaDistanciaProm(matriz, x, y):
+    distA =[]
+    distB = []
+    #print(x, y)
+    while nVariablesCluster(matriz,x) != 0:
+        x, variable = obtenerVariable(x)    
+        distA.append(variable)
+    while nVariablesCluster(matriz, y) != 0:
+        y, variable = obtenerVariable(y)
+        distB.append(variable)
+        
+    suma = 0
+    for i in distA:
+        for j in distB:
+            if(matriz[i][j] != '--'):
+                suma = suma + matriz[i][j]
+            else:
+                 suma = suma + matriz[j][i]    
+    return suma
+            
+        
+def obtenerVariable(cluster):
+    variable = ''
     for i in data[0]:
+        if i in cluster:
+            variable = i
+            cluster = cluster.replace(i, '')
+            break
+    return cluster, variable
+
+def nVariablesCluster(matriz, cluster):
+    variables = 0
+    print( matriz.index.values.tolist(), cluster)
+    for i in matriz.index.values.tolist():
         if i in cluster:
             variables = variables +1
     return variables
     
-def enlaceCompleto(matriz, matriz_copia, x, y):
+def enlaceCompleto(matriz, matriz_copia, x, y, original = None):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         if matriz_copia[x][j] != '--':
@@ -127,7 +168,7 @@ def enlaceCompleto(matriz, matriz_copia, x, y):
     return matriz
 
 
-def enlaceSimple(matriz, matriz_copia, x, y):
+def enlaceSimple(matriz, matriz_copia, x, y, original = None):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         if matriz_copia[x][j] != '--':
@@ -209,29 +250,30 @@ def transformarMatriz(matriz):
 def obtenerUltimoCluster(matriz):
     return "({},{})".format(list(matriz.columns)[1],matriz.index.values.tolist()[0]) 
     
-def agruparCluster(matriz, enlace):
+def agruparCluster(matriz, enlace, original = None):
     matriz_copia = matriz
     x, y = encontrarMenor(matriz)
     matriz = matriz.drop([y], axis=1)
     matriz = matriz.drop([y], axis=0)
     matriz = matriz.rename(columns={x: "({},{})".format(x,y)})
     matriz = matriz.rename(index={x: "({},{})".format(x,y)})
-    matriz = enlace(matriz, matriz_copia, x, y)
+    matriz = enlace(matriz, matriz_copia, x, y, original)
     
     return matriz, obtenerUltimoCluster(matriz)
 
     
 if __name__ == '__main__':
-    #matriz_distancia =  data #calculaDistancia(data, calcularEuclidean)
+    matriz_distancia = data #calculaDistancia(data, calcularEuclidean)
+    print(matriz_distancia)
+    matriz_distancia = transformarMatriz(matriz_distancia)
     #print(matriz_distancia)
-    #matriz_distancia = transformarMatriz(matriz_distancia)
-    #print(matriz_distancia)
-    
- 
-    #while len(matriz_distancia) != 2:
-        #matriz_distancia, cluster = agruparCluster(matriz_distancia, enlaceCompleto)
-    #print(matriz_distancia)
+    copia_matriz = matriz_distancia
+    while len(matriz_distancia) != 2:
+        matriz_distancia, cluster = agruparCluster(matriz_distancia, enlacePromedio, copia_matriz)
+    print(matriz_distancia)
     #print("Ultimo cluster", cluster)
+    #x = '(B,D)'
+    #sumatoriaDistanciaProm(x,'(C,E)')
     
     
     
