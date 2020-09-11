@@ -60,7 +60,7 @@ def encontrarMenor(matriz):
 
 def enlacePromedio(matriz, copia_matriz, x, y, original = None):
     
-    #print(original)
+    print('Comienzo de iteración')
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
@@ -72,7 +72,7 @@ def enlacePromedio(matriz, copia_matriz, x, y, original = None):
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
         Ny = nVariablesCluster(original, j)
         matriz[j]["({},{})".format(x,y)] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, j, "({},{})".format(x,y))
-        
+    print("fin de iteración")   
     return matriz
                  
 
@@ -88,6 +88,7 @@ def sumatoriaDistanciaProm(matriz, x, y):
         distB.append(variable)
         
     suma = 0
+    print(distA, distB)
     for i in distA:
         for j in distB:
             if(matriz[i][j] != '--'):
