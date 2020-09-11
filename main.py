@@ -64,9 +64,9 @@ def enlacePromedio(matriz, copia_matriz, x, y, original = None):
     for i in range(0, matriz.index.values.tolist().index("({},{})".format(x,y))):
         j = matriz.index.values.tolist()[i]
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
-        Ny = nVariablesCluster(original, j)
+        Ny = nVariablesCluster(original, str(j))
         matriz["({},{})".format(x,y)][j] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, "({},{})".format(x,y), j)
-    #print("fin columnas")
+    print("fin columnas")
     for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
         j = matriz.index.values.tolist()[i]
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
@@ -81,10 +81,10 @@ def sumatoriaDistanciaProm(matriz, x, y):
     distB = []
     #print(x, y)
     while nVariablesCluster(matriz,x) != 0:
-        x, variable = obtenerVariable(x)    
+        x, variable = obtenerVariable(matriz, str(x))    
         distA.append(variable)
     while nVariablesCluster(matriz, y) != 0:
-        y, variable = obtenerVariable(y)
+        y, variable = obtenerVariable(matriz, str(y))
         distB.append(variable)
         
     suma = 0
@@ -97,19 +97,25 @@ def sumatoriaDistanciaProm(matriz, x, y):
     return suma
             
         
-def obtenerVariable(cluster):
+def obtenerVariable(matriz, cluster):
     variable = ''
-    for i in data[0]:
-        if i in cluster:
+    #print(cluster, variable)
+    cluster = str(cluster)
+    for i in  matriz.index.values.tolist():
+        i = str(i)
+        if  i in cluster:
             variable = i
             cluster = cluster.replace(i, '')
             break
+    
     return cluster, variable
 
 def nVariablesCluster(matriz, cluster):
     variables = 0
-    print( matriz.index.values.tolist(), cluster)
+    #print( matriz.index.values.tolist(), type(cluster))
+    cluster = str(cluster)
     for i in matriz.index.values.tolist():
+        i = str(i)
         if i in cluster:
             variables = variables +1
     return variables
@@ -245,6 +251,11 @@ def transformarMatriz(matriz):
     for i in range(0, len(matriz.columns)):
         for j in range(0, i):
             matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] = "--"
+    
+    #renombrar columnas y filas
+    for i in matriz.index.values.tolist():
+        matriz = matriz.rename(columns={i: str(i)})
+        matriz = matriz.rename(index={i: str(i)})
     return matriz
     
 def obtenerUltimoCluster(matriz):
@@ -258,22 +269,18 @@ def agruparCluster(matriz, enlace, original = None):
     matriz = matriz.rename(columns={x: "({},{})".format(x,y)})
     matriz = matriz.rename(index={x: "({},{})".format(x,y)})
     matriz = enlace(matriz, matriz_copia, x, y, original)
-    
     return matriz, obtenerUltimoCluster(matriz)
 
     
 if __name__ == '__main__':
     matriz_distancia = data #calculaDistancia(data, calcularEuclidean)
-    print(matriz_distancia)
     matriz_distancia = transformarMatriz(matriz_distancia)
-    #print(matriz_distancia)
+    print(matriz_distancia)
     copia_matriz = matriz_distancia
     while len(matriz_distancia) != 2:
         matriz_distancia, cluster = agruparCluster(matriz_distancia, enlacePromedio, copia_matriz)
     print(matriz_distancia)
-    #print("Ultimo cluster", cluster)
-    #x = '(B,D)'
-    #sumatoriaDistanciaProm(x,'(C,E)')
+    print(cluster)
     
     
     
