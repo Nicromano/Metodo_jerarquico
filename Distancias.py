@@ -6,7 +6,8 @@ Created on Fri Sep 11 19:52:04 2020
 """
 
 import math
-from Helpers import cambiarKey
+import pandas as pd 
+from Helpers import cambiarKey, transformarMatriz
 
 def calcularEuclidean(lista):
     calculo = []
@@ -45,17 +46,17 @@ def calcularPearson(lista):
                 
 def calculaDistancia(datos, metodo):
     fil = []
-    matriz = pd.DataFrame(0.0 ,index=data[0],columns= data[0])
-    for  row1 in range(0, len(data)):
-        for row2 in range(0, len(data)):
-            for col in range(1, len(data.columns)):
-                fil.append(data[col][row1])
-                fil.append(data[col][row2])
+    matriz = pd.DataFrame(0.0 ,index=datos[0],columns= datos[0])
+    for  row1 in range(0, len(datos)):
+        for row2 in range(0, len(datos)):
+            for col in range(1, len(datos.columns)):
+                fil.append(datos[col][row1])
+                fil.append(datos[col][row2])
             if metodo == 'euclidean':
                 matriz[cambiarKey(matriz, row1)][cambiarKey(matriz, row2)] = calcularEuclidean(fil)
-            else if metodo == 'manhattan':
+            if metodo == 'manhattan':
                 matriz[cambiarKey(matriz, row1)][cambiarKey(matriz, row2)] = calcularManhattan(fil)
-            else if metodo == 'pearson':
+            if metodo == 'pearson':
                 matriz[cambiarKey(matriz, row1)][cambiarKey(matriz, row2)] = calcularPearson(fil)
             fil.clear()
     return transformarMatriz(matriz)

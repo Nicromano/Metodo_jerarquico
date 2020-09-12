@@ -17,8 +17,11 @@ def agruparCluster(matriz, enlace, original = None):
     matriz = matriz.rename(index={x: "({},{})".format(x,y)})
     if enlace == 'simple':
         matriz = enlaceSimple(matriz, matriz_copia, x, y)
-    else if enlace == 'completo':
+    if enlace == 'completo':
         matriz = enlaceCompleto(matriz, matriz_copia, x, y)
-    else if enlace == 'promedio':
+    if enlace == 'promedio':
         matriz = enlacePromedio(matriz, matriz_copia, x, y, original)
     return matriz, obtenerUltimoCluster(matriz)
+
+def obtenerDendrograma():
+    pass

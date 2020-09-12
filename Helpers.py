@@ -48,7 +48,6 @@ def nVariablesCluster(matriz, cluster):
 def sumatoriaDistanciaProm(matriz, x, y):
     distA =[]
     distB = []
-    #print(x, y)
     while nVariablesCluster(matriz,x) != 0:
         x, variable = obtenerVariable(matriz, str(x))    
         distA.append(variable)
@@ -64,7 +63,6 @@ def sumatoriaDistanciaProm(matriz, x, y):
                 suma = suma + matriz[i][j]
             else:
                  suma = suma + matriz[j][i]    
-    print("Suma ", suma)
     return suma       
         
 def obtenerVariable(matriz, cluster):
