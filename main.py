@@ -65,14 +65,18 @@ def enlacePromedio(matriz, copia_matriz, x, y, original = None):
         j = matriz.index.values.tolist()[i]
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
         Ny = nVariablesCluster(original, str(j))
-        matriz["({},{})".format(x,y)][j] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, "({},{})".format(x,y), j)
+        matriz["({},{})".format(x,y)][j] = (1/(Nx*Ny))*sumatoriaDistanciaProm(original, "({},{})".format(x,y), j)
+        print("Total", matriz["({},{})".format(x,y)][j])
     print("fin columnas")
     for i in range(matriz.index.values.tolist().index("({},{})".format(x,y))+1, len(matriz)):
         j = matriz.index.values.tolist()[i]
         Nx = nVariablesCluster(original, "({},{})".format(x,y))
-        Ny = nVariablesCluster(original, j)
-        matriz[j]["({},{})".format(x,y)] = (1/Nx*Ny)*sumatoriaDistanciaProm(original, j, "({},{})".format(x,y))
-    print("fin de iteración")   
+        Ny = nVariablesCluster(original, str(j))
+        print("n:", Nx, Ny)
+        matriz[j]["({},{})".format(x,y)] = (1/(Nx*Ny))*sumatoriaDistanciaProm(original, j, "({},{})".format(x,y))
+        print("Total", matriz[j]["({},{})".format(x,y)])
+    print("fin de iteración") 
+    print(matriz)
     return matriz
                  
 
@@ -88,15 +92,15 @@ def sumatoriaDistanciaProm(matriz, x, y):
         distB.append(variable)
         
     suma = 0
-    print(distA, distB)
+    
     for i in distA:
         for j in distB:
             if(matriz[i][j] != '--'):
                 suma = suma + matriz[i][j]
             else:
                  suma = suma + matriz[j][i]    
-    return suma
-            
+    print("Suma ", suma)
+    return suma       
         
 def obtenerVariable(matriz, cluster):
     variable = ''
@@ -113,7 +117,6 @@ def obtenerVariable(matriz, cluster):
 
 def nVariablesCluster(matriz, cluster):
     variables = 0
-    #print( matriz.index.values.tolist(), type(cluster))
     cluster = str(cluster)
     for i in matriz.index.values.tolist():
         i = str(i)
