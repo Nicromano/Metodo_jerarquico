@@ -7,9 +7,8 @@ Created on Fri Sep  4 18:55:04 2020
 
 import pandas as pd 
 import math
-from functools import reduce
-
-#data = pd.read_csv('Dataset.csv', sep=',', header=None)
+from Distancias import calculaDistancia
+data = pd.read_csv('Dataset.csv', sep=',', header=None)
 data = pd.read_csv('data.csv', sep=',', header=None)
 
 def calcularEuclidean(lista):
@@ -23,7 +22,7 @@ def calcularManhattan(lista):
     calculo = []
     for i in range(0, len(lista), 2):
         if i+1 < len(lista):
-            calculo.append( math.fabs(lista[i]-lista[i+1]))
+            calculo.append(math.fabs(lista[i]-lista[i+1]))
     return sum(calculo)
      
     
@@ -231,8 +230,6 @@ def enlaceSimple(matriz, matriz_copia, x, y, original = None):
                     matriz[j][ "({},{})".format(x,y)] = matriz_copia[j][y]
     return matriz        
 
-def cambiarClave(num):
-    return data[0][num]
 
 def cambiarKey(matriz, num):
     return matriz.index.values.tolist()[num]
@@ -246,9 +243,8 @@ def calculaDistancia(datos, metodo):
             for col in range(1, len(data.columns)):
                 fil.append(data[col][row1])
                 fil.append(data[col][row2])
-            matriz[cambiarClave(row1)][cambiarClave(row2)] = metodo(fil)
+            matriz[cambiarKey(matriz, row1)][cambiarKey(matriz, row2)] = metodo(fil)
             fil.clear()
-
     return transformarMatriz(matriz)
 
 def transformarMatriz(matriz):
@@ -277,12 +273,13 @@ def agruparCluster(matriz, enlace, original = None):
 
     
 if __name__ == '__main__':
-    matriz_distancia = data #calculaDistancia(data, calcularEuclidean)
-    matriz_distancia = transformarMatriz(matriz_distancia)
+    data = pd.read_csv('Dataset.csv', sep=',', header=None)
+    matriz_distancia = calculaDistancia(data, 'euclidean')
+    #matriz_distancia = transformarMatriz(matriz_distancia)
     print(matriz_distancia)
     copia_matriz = matriz_distancia
     while len(matriz_distancia) != 2:
-        matriz_distancia, cluster = agruparCluster(matriz_distancia, enlacePromedio, copia_matriz)
+        matriz_distancia, cluster = agruparCluster(matriz_distancia, 'promedio', copia_matriz)
     print(matriz_distancia)
     print(cluster)
     
