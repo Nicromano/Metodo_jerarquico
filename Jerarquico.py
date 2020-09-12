@@ -10,7 +10,7 @@ from Enlaces import enlacePromedio, enlaceCompleto, enlaceSimple
 
 def agruparCluster(matriz, enlace, original = None):
     matriz_copia = matriz
-    x, y = encontrarMenor(matriz)
+    menor, x, y = encontrarMenor(matriz)
     matriz = matriz.drop([y], axis=1)
     matriz = matriz.drop([y], axis=0)
     matriz = matriz.rename(columns={x: "({},{})".format(x,y)})
@@ -21,7 +21,7 @@ def agruparCluster(matriz, enlace, original = None):
         matriz = enlaceCompleto(matriz, matriz_copia, x, y)
     if enlace == 'promedio':
         matriz = enlacePromedio(matriz, matriz_copia, x, y, original)
-    return matriz, obtenerUltimoCluster(matriz)
+    return matriz, [x, y, menor]
 
 def obtenerDendrograma():
     pass

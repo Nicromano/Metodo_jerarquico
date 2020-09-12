@@ -10,17 +10,29 @@ import math
 from Distancias import calculaDistancia
 from Jerarquico import agruparCluster
 from Helpers import transformarMatriz
-
+from scipy.cluster import hierarchy
+import numpy as np
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     data = pd.read_csv('data.csv', sep=',', header=None)
     matriz_distancia = transformarMatriz(data) #calculaDistancia(data, 'euclidean')
-    print(matriz_distancia)
     copia_matriz = matriz_distancia
+    cluster = []
     while len(matriz_distancia) != 2:
-        matriz_distancia, cluster = agruparCluster(matriz_distancia, 'promedio', copia_matriz)
-    print(matriz_distancia)
+        matriz_distancia, x = agruparCluster(matriz_distancia, 'promedio', copia_matriz)
+        cluster.append(x)
     print(cluster)
+
+    
+    ytdist = np.array([662., 877., 255., 412., 996., 295., 468., 268., 400., 754., 564., 138., 219., 869., 669.])
+    Z = hierarchy.linkage(ytdist, 'single')
+    plt.figure()
+    print(Z)
+    dn = hierarchy.dendrogram(Z)
+    print(dn)
+    
+    
     
     
     

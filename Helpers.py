@@ -14,8 +14,8 @@ def encontrarMenor(matriz):
                 x = j 
                 y = i 
     if x < y:
-        return  cambiarKey(matriz, x), cambiarKey( matriz, y)
-    return  cambiarKey( matriz, y), cambiarKey(matriz, x)
+        return  menor, cambiarKey(matriz, x), cambiarKey( matriz, y)
+    return  menor, cambiarKey( matriz, y), cambiarKey(matriz, x)
 
 
 def obtenerUltimoCluster(matriz):
