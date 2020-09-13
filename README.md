@@ -48,7 +48,7 @@ matriz_result, cluster, agrupaciones = agruparCluster(matriz_distancia, 'promedi
 Método jerárquico con dato inicial, datos en crudo sin matriz de distancia 
 
 ```
-data = pd.read_csv('data.csv', sep=',', header=None)
+data = pd.read_csv('Dataset.csv', sep=',', header=None)
 matriz_result, cluster, agrupaciones = agruparCluster(data, 'promedio', 'eucliean')
 
 ``` 
