@@ -25,12 +25,12 @@ agruparCluster(matriz, enlace, metodo)
 
 Tal que:
 - Matriz, es un dataFrame que corresponde a la matriz de distancia de los datos 
-- enlace, es el tipo de enlace a usar: "simple", "completo", "promedio"
-- metodo, es un parámetro opcional que especifica el metodo usado en la matriz de distancia
+- Enlace, es el tipo de enlace a usar: "simple", "completo", "promedio"
+- Método, es un parámetro opcional que especifica el método usado en la matriz de distancia
 
 Retorna:
 - La matriz resultante
-- las distancia entre cada cluster
+- Las distancia entre cada cluster
 - Los cluster agrupados
 
 ## Ejemplo 1 
