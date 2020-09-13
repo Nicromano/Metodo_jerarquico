@@ -5,11 +5,16 @@ Created on Fri Sep 11 19:49:35 2020
 @author: NICROMANO
 """
 
-from Helpers import  encontrarMenor, nVariablesCluster
+from Helpers import  encontrarMenor, nVariablesCluster, esMatrizTransformada, transformarMatriz
 from Enlaces import enlacePromedio, enlaceCompleto, enlaceSimple
+from Distancias import calculaDistancia
 
-def agruparCluster(matriz, enlace, original = None):
+def agruparCluster(matriz, enlace, metodo = None):
     cluster = []
+    if metodo != None:
+        matriz = calculaDistancia(matriz, metodo)
+    if not esMatrizTransformada(matriz):
+        matriz = transformarMatriz(matriz)
     copia = matriz
     while(len(matriz)!=2):
         matriz_copia = matriz
@@ -23,9 +28,12 @@ def agruparCluster(matriz, enlace, original = None):
         if enlace == 'completo':
             matriz = enlaceCompleto(matriz, matriz_copia, x, y)
         if enlace == 'promedio':
-            matriz = enlacePromedio(matriz, matriz_copia, x, y, original)
+            matriz = enlacePromedio(matriz, matriz_copia, x, y, copia)
         cluster.append([x, y, menor, nVariablesCluster(copia, x) + nVariablesCluster(copia, y)])
     return matriz, cluster
+
+def generarCorte(cluster):
+    pass
 
 def obtenerDendrograma():
     pass

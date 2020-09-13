@@ -17,7 +17,11 @@ def encontrarMenor(matriz):
         return  menor, cambiarKey(matriz, x), cambiarKey( matriz, y)
     return  menor, cambiarKey( matriz, y), cambiarKey(matriz, x)
 
-
+def esMatrizTransformada(matriz):
+    if matriz[cambiarKey(matriz,0)][cambiarKey(matriz, len(matriz)-1)] == '--':
+        return True
+    return False
+    
 def obtenerUltimoCluster(matriz):
     return "({},{})".format(list(matriz.columns)[1],matriz.index.values.tolist()[0]) 
 
