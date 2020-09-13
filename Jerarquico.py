@@ -5,7 +5,7 @@ Created on Fri Sep 11 19:49:35 2020
 @author: NICROMANO
 """
 
-from Helpers import  encontrarMenor, nVariablesCluster, esMatrizTransformada, transformarMatriz
+from Helpers import  encontrarMenor,obtenerUltimoCluster, nVariablesCluster, esMatrizTransformada, transformarMatriz
 from Enlaces import enlacePromedio, enlaceCompleto, enlaceSimple
 from Distancias import calculaDistancia
 

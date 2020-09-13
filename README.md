@@ -30,6 +30,6 @@ Tal que:
 
 Retorna:
 - La matriz resultante
-- las distancia 
+- las distancia entre cada cluster
 - Los cluster agrupados
 
