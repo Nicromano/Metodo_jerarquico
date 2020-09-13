@@ -30,7 +30,7 @@ def agruparCluster(matriz, enlace, metodo = None):
         if enlace == 'promedio':
             matriz = enlacePromedio(matriz, matriz_copia, x, y, copia)
         cluster.append([x, y, menor, nVariablesCluster(copia, x) + nVariablesCluster(copia, y)])
-    return matriz, cluster
+    return matriz, cluster, obtenerUltimoCluster(matriz)
 
 def generarCorte(cluster):
     pass
