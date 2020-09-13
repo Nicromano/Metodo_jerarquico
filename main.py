@@ -13,9 +13,16 @@ from Jerarquico import agruparCluster
 
 if __name__ == '__main__':
     data = pd.read_csv('data.csv', sep=',', header=None)
-    matriz_distancia = data #calculaDistancia(data, 'euclidean')
+    print(data)
+    matriz_distancia = data #calculaDistancia(data, "euclidean")
+    print(matriz_distancia)
     matriz_result, cluster, agrupaciones = agruparCluster(matriz_distancia, 'promedio')
+    print("Matriz resultante: ")
+    print(matriz_result)
+    print("Cluster: ")
     print(cluster)
+    print("Agrupaciones: ")
+    print(agrupaciones)
     
    
     

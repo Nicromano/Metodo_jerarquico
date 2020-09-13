@@ -6,7 +6,7 @@ Created on Fri Sep 11 19:59:17 2020
 """
 
 def encontrarMenor(matriz):
-    menor = max(matriz.max())
+    menor = float(max(matriz.max()))
     for i in range(0, len(matriz)-1):
         for j in range(i+1, len(matriz.columns)):
             if matriz[cambiarKey(matriz, j)][cambiarKey(matriz, i)] < menor:
