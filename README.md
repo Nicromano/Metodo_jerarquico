@@ -1,4 +1,4 @@
-# Metodo_jerarquico
+# Metodo jerárquico
 
 Para empezar las importaciones de las librerias deben ser las siguientes 
 
@@ -33,3 +33,22 @@ Retorna:
 - las distancia entre cada cluster
 - Los cluster agrupados
 
+## Ejemplo 1 
+
+Método jerárquico con matriz de distancia obtenida previamente 
+```
+data = pd.read_csv('data.csv', sep=',', header=None)
+matriz_distancia = calculaDistancia(data, 'euclidean')
+matriz_result, cluster, agrupaciones = agruparCluster(matriz_distancia, 'promedio')
+
+``` 
+
+## Ejemplo 2
+
+Método jerárquico con dato inicial, datos en crudo sin matriz de distancia 
+
+```
+data = pd.read_csv('data.csv', sep=',', header=None)
+matriz_result, cluster, agrupaciones = agruparCluster(data, 'promedio', 'eucliean')
+
+``` 
